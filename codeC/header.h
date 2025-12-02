@@ -1,3 +1,3 @@
 typedef struct usine {
-  char[50] ID;
+  char* ID;
 }Usine;
