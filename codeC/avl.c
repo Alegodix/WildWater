@@ -1,4 +1,5 @@
 #include "avl.h"
+
 pArbre creerArbre(){
 	pAVL nv=malloc(sizeof(AVL));
   	nv->u->ID=NULL;
@@ -7,7 +8,8 @@ pArbre creerArbre(){
 	nv->eq=0;
 return nv;
 }
-int max(int a, int b){
+
+int max(int a, int b){ //retourne le max entre a et b deux entiers
 	if(a > b){
 		return a;
 	}
@@ -15,7 +17,8 @@ int max(int a, int b){
 		return b;
 	}
 }
-int min(int a, int b){
+
+int min(int a, int b){ //même chose pour le minimum entre deux entiers
 	if(a =< b){
 		return a;
 	}
@@ -25,7 +28,7 @@ int min(int a, int b){
 }
 
 
-pAVL rotationgauche(pAVL a){
+pAVL rotationgauche(pAVL a){ //fais une rotation gauche de l'AVL entré en paramètre
     int eq_a = 0;
     int eq_p = 0;
     pAVL pivot = a->fd;
@@ -62,7 +65,7 @@ pAVL doublerotationdroite(pAVL a){
     a->fg = rotationgauche(a->fg);
     return rotationdroite(a);
 }
-pAVL equilibrerAVL(pAVL a) {
+pAVL equilibrerAVL(pAVL a) { //équilinbre l'AVL si déséquilibre
 	if (a != NULL) {
 		if (a->equilibre <= -2) {
 			if (a->fg->equilibre <= 0) {
