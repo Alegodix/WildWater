@@ -3,9 +3,9 @@
 pArbre creerArbre(char* ID) { //créée un arbre et lui assigne l'ID en paramètre + valeurs NULL autrement; 
 	pAVL nouveau = malloc(sizeof(AVL));
   	nouveau->u->ID = ID;
-  	nouveau->u->capte = nouveau->u->conso = nv->u->capacitemax = 0;
-	nv->fg = nv->fd = NULL;
-	nv->eq = 0;
+  	nouveau->u->capte = nouveau->u->conso = nouveau->u->capacitemax = 0;
+	nouveau->fg = nouveau->fd = NULL;
+	nouveau->eq = 0;
 	return nv;
 }
 
@@ -75,7 +75,17 @@ pAVL equilibrerAVL(pAVL a) { //équilibre l'AVL à l'aide des fctions de rotatio
 	}
 	return a;
 }
+/*
+Comment insérer dans l’AVL:
 
+// Exemple théorique de comparaison 
+int resultat = strcmp(identifiant_nouveau, noeud_actuel->usine.id); 
+if (resultat < 0) {                        // L'identifiant est "plus petit" alphabétiquement -> Aller à GAUCHE 
+} else if (resultat > 0) {              // L'identifiant est "plus grand" alphabétiquement -> Aller à DROITE 
+} else {                                       
+        // resultat == 0 : C'est la même usine ! 
+        // On ne crée pas de nouveau noeud, on met à jour les données (somme des volumes) }
+*/
 pAVL insertionAVL(pAVL a, char* ID, int* h) { //insère un élément dans l'AVL INCOMPLET A MODIFIER 
 	if (a == NULL) {
 		*h = 1;
