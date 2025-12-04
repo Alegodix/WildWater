@@ -1,8 +1,8 @@
 #include "avl.h"
 pArbre creerArbre(){
 	pAVL nv=malloc(sizeof(AVL));
-  	nv->u=NULL;
-  	nv->capte=nv->conso=nv->capacitemax=0;
+  	nv->u->ID=NULL;
+  	nv->u->capte=nv->u->conso=nv->u->capacitemax=0;
 	nv->fg=nv->fd=NULL;
 	nv->eq=0;
 return nv;
