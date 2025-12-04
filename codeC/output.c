@@ -15,12 +15,13 @@ void parcours_infixe_inverse(Arbre* a, FILE* f) {
   }
 }
 
-void output_histo(char* nom_fichier, Arbre* racine, char* mode) {
+void output_histo(char* nom_fichier, Arbre* racine) {
     FILE* f = fopen(nom_fichier, "w");
     if (f == NULL) {
         fprintf(stderr, "Erreur : Impossible de créer le fichier %s\n", nom_fichier);
         exit(2);
     }
     fprintf(f, "identifier;max volume (k.m3.year-1)\n");
-    parcours_infixe_inverse(racine, f, mode);
+    parcours_infixe_inverse(racine, f);
     fclose(f);
+}
