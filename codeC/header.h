@@ -14,15 +14,15 @@ typedef struct avl {
   int eq;
 }AVL, *pAVL;
 
-Arbre* creerArbre(char* id);
+Arbre* creerArbre(char* id, float ct, float capamax, float cs);
 
-Arbre* insertionAVL(Arbre* a, char* id, long volume, int* h_change);
+Arbre* insertionAVL(pAVL a, char* id, float volume, int* h);
 
-Arbre* equilibreAVL(Arbre* a);
+Arbre* equilibreAVL(pAVL a);
 
-void libererArbre(Arbre* a);
+void libererArbre(pAVL a);
 
-void afficherArbreInverse(Arbre* a);
+void afficherArbreInverse(pAVL a);
 
 int max(int a, int b);
 int min(int a, int b);
