@@ -1,26 +1,26 @@
 #include "avl.h"
 
-pArbre creerArbre(){
+pArbre creerArbre() {
 	pAVL nv=malloc(sizeof(AVL));
   	nv->u->ID=NULL;
   	nv->u->capte=nv->u->conso=nv->u->capacitemax=0;
 	nv->fg=nv->fd=NULL;
 	nv->eq=0;
-return nv;
+	return nv;
 }
 
-int max(int a, int b){ //retourne le max entre a et b deux entiers
+int max(int a, int b) { //retourne le max entre a et b deux entiers
 	if(a > b) return a;
 	else return b;
 }
 
-int min(int a, int b){ //même chose pour le minimum entre deux entiers
+int min(int a, int b) { //même chose pour le minimum entre deux entiers
 	if(a =< b) return a;
 	else return b;
 }
 
 
-pAVL rotationgauche(pAVL a){ //fais une rotation gauche de l'AVL entré en paramètre
+pAVL rotationgauche(pAVL a) { //fais une rotation gauche de l'AVL entré en paramètre
     int eq_a = 0;
     int eq_p = 0;
     pAVL pivot = a->fd;
@@ -34,7 +34,7 @@ pAVL rotationgauche(pAVL a){ //fais une rotation gauche de l'AVL entré en param
     return a;
 }
 
-pAVL rotationdroite(pAVL a){
+pAVL rotationdroite(pAVL a) {
     int eq_a = 0;
     int eq_p = 0;
     pAVL pivot = a->fg;
@@ -48,16 +48,16 @@ pAVL rotationdroite(pAVL a){
     return a;
 }
 
-pAVL doublerotationgauche(pAVL a){
+pAVL doublerotationgauche(pAVL a) { // fait une double rotation gauche de l'AVL entré en paramètre
     a->fd = rotationdroite(a->fd);
     return rotationgauche(a);
 }
 
-pAVL doublerotationdroite(pAVL a){
+pAVL doublerotationdroite(pAVL a){ // fait une double rotation gauche de l'AVL entré en paramètre
     a->fg = rotationgauche(a->fg);
     return rotationdroite(a);
 }
-pAVL equilibrerAVL(pAVL a) { //équilinbre l'AVL si déséquilibre
+pAVL equilibrerAVL(pAVL a) { //équilibre l'AVL à l'aide des fctions de rotation si déséquilibre (vérifie si il y a déséquilibre aussi)
 	if (a != NULL) {
 		if (a->equilibre <= -2) {
 			if (a->fg->equilibre <= 0) {
