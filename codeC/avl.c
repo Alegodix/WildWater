@@ -62,7 +62,7 @@ pAVL doublerotationdroite(pAVL a){
     a->fg = rotationgauche(a->fg);
     return rotationdroite(a);
 }
-Arbre* equilibrerAVL(Arbre* a) {
+pAVL equilibrerAVL(pAVL a) {
 	if (a != NULL) {
 		if (a->equilibre <= -2) {
 			if (a->fg->equilibre <= 0) {
@@ -81,7 +81,7 @@ Arbre* equilibrerAVL(Arbre* a) {
 	return a;
 }
 
-Arbre* insertionAVL(Arbre* a, int v, int* h) {
+pAVL insertionAVL(pAVL a, int v, int* h) {
 	if (a == NULL) {
 		*h = 1;
 		return creerArbre(v);
