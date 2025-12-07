@@ -39,7 +39,7 @@ pAVL rotationGaucheDouble(pAVL a);
 pAVL rotationDroiteDouble(pAVL a);
 pAVL creerArbre(Usine u);
 pAVL insertionAVL(pAVL a, Usine u, int* h);
-pAVL equilibreAVL(pAVL a);
+pAVL equilibrerAVL(pAVL a);
 void libererArbre(pAVL a);
 
 // Module input.c
@@ -52,4 +52,4 @@ void chargerDonnees(char* cheminFichier, Arbre** a);
 
 void parcoursInfixeInverse(Arbre* a, FILE* f);
 void afficherNoeud(Usine* u, FILE* f);
-void output_histo(char* nom_fichier, Arbre* a);
+void outputHistoSource(char* nomFichier, Arbre* a)
