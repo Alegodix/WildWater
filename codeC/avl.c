@@ -1,4 +1,4 @@
-#include "avl.h"
+#include "header.h"
 
 // créer un arbre et lui assigner l'usine en paramètre
 pArbre creerArbre(Usine u) { 
