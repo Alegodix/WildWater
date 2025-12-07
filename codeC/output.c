@@ -1,24 +1,34 @@
 # include "header.h"
 
-void afficher_noeud(Usine* u, FILE* f) {
-    fprintf(f, "%s;%ld\n", u->id, u->vol_source);
+/*
+Ecrire une ligne de données pour une usine et gère la conversion d'unités
+*/
+void afficherNoeud(Usine* u, FILE* f) {
+    double volume = u->capte / 1000.0;
+    fprintf(f, "%s;%.3f\n", u->ID, volume);
 }
 
-void parcours_infixe_inverse(Arbre* a, FILE* f) {
+/*
+Ecrire les identifiants dans l'ordre alphabétique inverse
+*/
+void parcoursInfixeInverse(Arbre* a, FILE* f) {
   if (a != NULL) {
-    parcours_infixe_inverse(a->droit, f);
-    afficher_noeud(a->usine, f);
-    parcours_infixe_inverse(a->gauche, f);
+    parcoursInfixeInverse(a->fd, f);
+    afficherNoeud(a->u, f);
+    parcoursInfixeInverse(a->fg, f);
   }
 }
 
-void output_histo(char* nom_fichier, Arbre* racine) {
-    FILE* f = fopen(nom_fichier, "w");
+/* 
+Générer le fichier CSV pour faire l'histogramme
+*/
+void outputHistoSource(char* nomFichier, Arbre* a) {
+    FILE* f = fopen(nomFichier, "w");
     if (f == NULL) {
-        fprintf(stderr, "Erreur : Impossible de créer le fichier %s\n", nom_fichier);
-        exit(2);
+        fprintf(stderr, "Erreur : Impossible de créer le fichier %s\n", nomFichier);
+        exit(1);
     }
     fprintf(f, "identifier;source volume (k.m3.year-1)\n");
-    parcours_infixe_inverse(racine, f);
+    parcoursInfixeInverse(a, f);
     fclose(f);
 }
