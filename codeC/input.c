@@ -46,10 +46,13 @@ void chargerDonnees(char* cheminFichier, Arbre** a) {
     if (strcmp(col1, "-") != 0 && strlen(col1) > 0) continue;
     if (strcmp(col3, "-") == 0) continue;
     if (!est_numerique(col4)) continue;
+
+    Usine u_temp;
+    strncpy(u_temp, col3, 49);
+    u_temp.ID[49] = '\0';
+    u_temp.capte = atof(col4);
     
-    double volume = atof(col4);
-    char* ID = col3;
-    *a = insertionDonneesSource(*a, ID, volume);
+    *a = insertionAVL(*a, u-temp);
   }
   fclose(fichier);
 }
