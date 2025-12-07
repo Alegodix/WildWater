@@ -1,63 +1,68 @@
 #include "avl.h"
 
-pArbre creerArbre(char* ID) { //créée un arbre et lui assigne l'ID en paramètre + valeurs NULL autrement; 
+// créer un arbre et lui assigner l'ID en paramètre
+pArbre creerArbre(Usine u) { 
 	pAVL nouveau = malloc(sizeof(AVL));
-  	nouveau->u->ID = ID;
-  	nouveau->u->capte = nouveau->u->conso = nouveau->u->capacitemax = 0;
+	if (nouveau == NULL) exit(1);
+	nouveau->u = malloc(sizeof(Usine));
+	if (nouveau->u) exit(1);
+  	strncpy(nouveau->u->ID, u.ID, 49);
+	nouveau->u->ID[49] = '\0';
+  	nouveau->u->capte = u->capte;
+	nouveau->u->conso = nouveau->u->capacitemax = 0;
 	nouveau->fg = nouveau->fd = NULL;
-	nouveau->eq = 0;
-	return nv;
+	nouveau->equilibre = 0;
+	return nouveau;
 }
 
-int max(int a, int b) { //retourne le max entre a et b deux entiers; OK
+int max(int a, int b) { 
 	if (a > b) return a;
-	else return b;
+	return b;
 }
 
-int min(int a, int b) { //même chose pour le minimum entre deux entiers; OK
-	if (a =< b) return a;
-	else return b;
+int min(int a, int b) {
+	if (a < b) return a;
+	return b;
 }
 
-
-pAVL rotationgauche(pAVL a) { //fais une rotation gauche de l'AVL entré en paramètre; OK
+pAVL rotationGauche(pAVL a) {
     int eq_a = 0;
     int eq_p = 0;
     pAVL pivot = a->fd;
     a->fd = pivot->fg;
     pivot->fg = a;
-    eq_a = a->eq;
-    eq_p = pivot->eq;
-    a->eq = eq_a - max(eq_p, 0) - 1;
-    pivot->eq = min(eq_a - 2, min(eq_a + eq_p - 2, eq_p - 1));
+    eq_a = a->equilibre;
+    eq_p = pivot->equilibre;
+    a->equilibre = eq_a - max(eq_p, 0) - 1;
+    pivot->equilibre = min(eq_a - 2, min(eq_a + eq_p - 2, eq_p - 1));
     a = pivot;
     return a;
 }
 
-pAVL rotationdroite(pAVL a) { //fait une rotation droite de l'AVL entré en paramètre; OK
+pAVL rotationDroite(pAVL a) {
     int eq_a = 0;
     int eq_p = 0;
     pAVL pivot = a->fg;
     a->fg = pivot->fd;
     pivot->fd = a;
-    eq_a = a->eq;
-    eq_p = pivot->eq;
-    a->eq = eq_a - min(eq_p, 0) + 1;
-    pivot->eq = max(eq_a + 2, max(eq_a + eq_p + 2, eq_p + 1));
+    eq_a = a->equilibre;
+    eq_p = pivot->equilibre;
+    a->equilibre = eq_a - min(eq_p, 0) + 1;
+    pivot->equilibre = max(eq_a + 2, max(eq_a + eq_p + 2, eq_p + 1));
     a = pivot;
     return a;
 }
 
-pAVL doublerotationgauche(pAVL a) { // fait une double rotation gauche de l'AVL entré en paramètre; OK 
-    a->fd = rotationdroite(a->fd);
-    return rotationgauche(a);
+pAVL rotationGaucheDouble(pAVL a) {
+    a->fd = rotationDroite(a->fd);
+    return rotationGauche(a);
 }
 
-pAVL doublerotationdroite(pAVL a){ // fait une double rotation gauche de l'AVL entré en paramètre; OK
-    a->fg = rotationgauche(a->fg);
-    return rotationdroite(a);
+pAVL rotationDroiteDouble(pAVL a){
+    a->fg = rotationGauche(a->fg);
+    return rotationDroite(a);
 }
-pAVL equilibrerAVL(pAVL a) { //équilibre l'AVL à l'aide des fctions de rotation si déséquilibre (vérifie si il y a déséquilibre aussi); OK normalement
+pAVL equilibrerAVL(pAVL a) {
 	if (a != NULL) {
 		if (a->equilibre <= -2) {
 			if (a->fg->equilibre <= 0) {
@@ -75,6 +80,7 @@ pAVL equilibrerAVL(pAVL a) { //équilibre l'AVL à l'aide des fctions de rotatio
 	}
 	return a;
 }
+
 /*
 Comment insérer dans l’AVL:
 
@@ -86,17 +92,20 @@ if (resultat < 0) {                        // L'identifiant est "plus petit" alp
         // resultat == 0 : C'est la même usine ! 
         // On ne crée pas de nouveau noeud, on met à jour les données (somme des volumes) }
 */
-pAVL insertionAVL(pAVL a, char* ID, int* h) { //insère un élément dans l'AVL INCOMPLET A MODIFIER 
+pAVL insertionAVL(pAVL a, Usine u, int* h) { //insère un élément dans l'AVL INCOMPLET A MODIFIER 
 	if (a == NULL) {
 		*h = 1;
-		return creerArbre(ID);
+		return creerArbre(u);
 	}
-	if (ID < a->value) {
-		a->fg = insertionAVL(a->fg, ID, h);
+	int cmp = strcmp(u.ID, a->u->ID);
+	if (cmp < 0) {
+		a->fg = insertionAVL(a->fg, u, h);
 		*h = -*h;
-	} else if (v > a->value) {
-		a->fd = insertionAVL(a->fd, ID, h);
+	} else if (v > 0) {
+		a->fd = insertionAVL(a->fd, u, h);
 	} else {
+		// L'usine existe déjà mais on doit additionner les volumes
+		a->u->capte = a->u->capte + u.capte;
 		*h = 0;
 		return a;
 	}
@@ -111,4 +120,13 @@ pAVL insertionAVL(pAVL a, char* ID, int* h) { //insère un élément dans l'AVL 
 		
 	}
 	return a;
+}
+
+void libererArbre(Arbre* a) {
+    if (a != NULL) {
+        libererArbre(a->fg);
+        libererArbre(a->fd);
+		free(a->u);
+        free(a);
+    }
 }
