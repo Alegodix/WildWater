@@ -15,7 +15,7 @@ typedef struct AVL {
   struct *Usine u;
   struct *AVL fg;
   struct *AVL fd;
-  int eq;
+  int equilibre;
 }AVL, *pAVL;
 
 pAVL creerArbre(char* id, float ct, float capamax, float cs);
