@@ -1,6 +1,6 @@
 #include "avl.h"
 
-// créer un arbre et lui assigner l'ID en paramètre
+// créer un arbre et lui assigner l'usine en paramètre
 pArbre creerArbre(Usine u) { 
 	pAVL nouveau = malloc(sizeof(AVL));
 	if (nouveau == NULL) exit(1);
@@ -81,17 +81,6 @@ pAVL equilibrerAVL(pAVL a) {
 	return a;
 }
 
-/*
-Comment insérer dans l’AVL:
-
-// Exemple théorique de comparaison 
-int resultat = strcmp(identifiant_nouveau, noeud_actuel->usine.id); 
-if (resultat < 0) {                        // L'identifiant est "plus petit" alphabétiquement -> Aller à GAUCHE 
-} else if (resultat > 0) {              // L'identifiant est "plus grand" alphabétiquement -> Aller à DROITE 
-} else {                                       
-        // resultat == 0 : C'est la même usine ! 
-        // On ne crée pas de nouveau noeud, on met à jour les données (somme des volumes) }
-*/
 pAVL insertionAVL(pAVL a, Usine u, int* h) { //insère un élément dans l'AVL INCOMPLET A MODIFIER 
 	if (a == NULL) {
 		*h = 1;
