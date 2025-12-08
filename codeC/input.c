@@ -7,9 +7,9 @@ Supprimer le caractère de saut de ligne final
 */
 void nettoyerLigne(char* chaine) {
   char* p = strchr(chaine, '\n');
-  if (p) *p = '\0';
+  if (p != NULL) *p = '\0';
   p = strchr(chaine, '\r');
-  if (p) *p = '\0';
+  if (p != NULL) *p = '\0';
 }
 
 /*
@@ -25,14 +25,14 @@ int estNumerique(char* chaine) {
 Charger les données pour faire l'histogramme des sources
 */
 void chargerDonnees(char* cheminFichier, Arbre** a) {
-  FILE* f = fopen(cheminFichier, "r");
-  if (f == NULL) {
+  FILE* fichier = fopen(cheminFichier, "r");
+  if (fichier == NULL) {
     fprintf(stderr, "Erreur : Impossible d'ouvrir le fichier %s\n", cheminFichier);
     exit(1);
   }
   char ligne[BUFFER_SIZE];
   char ligne_copie[BUFFER_SIZE];
-  while (fgets(ligne, BUFFER_SIZE, f) != NULL) {
+  while (fgets(ligne, BUFFER_SIZE, fichier) != NULL) {
     nettoyerLigne(ligne);
     if (strlen(ligne) == 0) continue;
     strcpy(ligne_copie, ligne);
