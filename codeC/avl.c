@@ -90,7 +90,7 @@ pAVL insertionAVL(pAVL a, Usine u, int* h) {
 	if (cmp < 0) {
 		a->fg = insertionAVL(a->fg, u, h);
 		*h = -*h;
-	} else if (v > 0) {
+	} else if (cmp > 0) {
 		a->fd = insertionAVL(a->fd, u, h);
 	} else {
 		// L'usine existe déjà mais on doit additionner les volumes
