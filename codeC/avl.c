@@ -90,7 +90,7 @@ pAVL insertionAVL(pAVL a, Usine u, int* h) {
 	} else {
 		// L'usine existe déjà mais on doit additionner les volumes
 		a->u->volumeSource = a->u->volumeSource + u.volumeSource;
-		a->u->volumeTraite = a->u->volumeTraite + u->volumeTraite;
+		a->u->volumeTraite = a->u->volumeTraite + u.volumeTraite;
 		if (u.capacite > 0) {
         	a->u->capacite = u.capacite;
     	}
