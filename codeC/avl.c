@@ -104,7 +104,7 @@ pAVL insertionAVL(pAVL a, Usine u, int* h) {
 void libererMemoireAVL(pAVL a) {
     if (a != NULL) {
         libererMemoireAVL(a->fg);
-        libererMemoireALV(a->fd);
+        libererMemoireAVL(a->fd);
 		free(a->u);
         free(a);
     }
