@@ -55,7 +55,13 @@ void chargerDonnees(char* cheminFichier, pAVL* a) {
     u_temp.ID[49] = '\0';
     u_temp.volumeSource = atof(col4);
     
-    *a = insertionAVL(*a, u_temp, &((*a)->equilibre));
+    if (a == NULL) {
+      int h = 0;
+      *a = insertionAVL(*a, u_temp, &h);
+    } else {
+      *a = insertionAVL(*a, u_temp, &((*a)->equilibre));
+    }
+    //*a = insertionAVL(*a, u_temp, &((*a)->equilibre));
   }
   printf("Les donnees ont ete rentres dans l'AVL");
   fclose(fichier);
