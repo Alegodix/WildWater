@@ -12,7 +12,7 @@ void afficherNoeud(Usine* u, FILE* fichier, char* mode) {
     } else if (strcmp(mode, "real") == 0) {
         valeur = u->volumeTraite;
     }
-    fprintf(fichier, "%s;%.3f\n", u->ID, volume / 1000.0);
+    fprintf(fichier, "%s;%.3f\n", u->ID, valeur / 1000.0);
 }
 
 /*
