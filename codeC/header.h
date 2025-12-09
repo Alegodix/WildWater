@@ -17,9 +17,7 @@ typedef struct usine {
   double volumeSource;
   double capacite;
   double volumeTraite;
-} Usine;
-
-typedef *Usine pUsine;
+} Usine, *pUsine;
 
 /*
 Structure de l'arbre AVL, contenant un pointeur vers une usine
@@ -29,9 +27,7 @@ typedef struct AVL {
   struct AVL* fg;
   struct AVL* fd;
   int equilibre;
-} AVL;
-
-typedef *AVL pAVL;
+} AVL, *pAVL;
 
 // Module avl.c
 
