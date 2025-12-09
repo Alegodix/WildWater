@@ -50,6 +50,6 @@ void chargerDonnees(char* cheminFichier, pAVL* a);
 
 // Module output.c
 
-void parcoursInfixeInverse(pAVL a, FILE* f);
-void afficherNoeud(Usine* u, FILE* f);
+void parcoursInfixeInverse(pAVL a, FILE* f, char* mode);
+void afficherNoeud(Usine* u, FILE* f, char* mode);
 void outputHistoSource(char* nomFichier, pAVL a);
