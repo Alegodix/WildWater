@@ -30,6 +30,9 @@ void chargerDonnees(char* cheminFichier, pAVL* a) {
     fprintf(stderr, "Erreur : Impossible d'ouvrir le fichier %s\n", cheminFichier);
     exit(1);
   }
+
+  printf"Le fichier a ete ouvert sans erreur");
+  
   char ligne[BUFFER_SIZE];
   char ligne_copie[BUFFER_SIZE];
   while (fgets(ligne, BUFFER_SIZE, fichier) != NULL) {
@@ -54,5 +57,6 @@ void chargerDonnees(char* cheminFichier, pAVL* a) {
     
     *a = insertionAVL(*a, u_temp, &((*a)->equilibre));
   }
+  printf"Les donnees ont ete rentres dans l'AVL");
   fclose(fichier);
 }
