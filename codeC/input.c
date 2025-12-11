@@ -23,8 +23,9 @@ int estNumerique(char* chaine) {
 
 /*
 Charger les données pour faire l'histogramme des sources
+Paramètre mode : "src", "max" ou "real"
 */
-void chargerDonnees(char* cheminFichier, pAVL* a) {
+void chargerDonnees(char* cheminFichier, pAVL* a, char* mode) {
   FILE* fichier = fopen(cheminFichier, "r");
   if (fichier == NULL) {
     fprintf(stderr, "Erreur : Impossible d'ouvrir le fichier %s\n", cheminFichier);
@@ -44,19 +45,37 @@ void chargerDonnees(char* cheminFichier, pAVL* a) {
     char* col2 = strtok(NULL, ";");
     char* col3 = strtok(NULL, ";");
     char* col4 = strtok(NULL, ";");
+    char* col5 = strtok(NULL, ";");
 
     if (col1 == NULL || col2 == NULL || col3 == NULL || col4 == NULL) continue;
     if (strcmp(col1, "-") != 0 && strlen(col1) > 0) continue;
-    if (strcmp(col3, "-") == 0) continue;
     if (!estNumerique(col4)) continue;
 
-    Usine u_temp;
+    Usine u_temp = creerUsine();
     strncpy(u_temp.ID, col3, 49);
-    u_temp.ID[49] = '\0';
-    u_temp.volumeSource = atof(col4);
+
+    if (strcmp(mode, "max") == 0) {
+      if (strcmp(col3, "-") == 0) {
+        u_temp.capacite = atof(col4);
+        ligne_valide = 1;
+      }
+    } else if (strcmp(mode, "src") == 0 || strcmp(mode, "real") == 0) {
+      if (strcmp(col3, "-") != 0) {
+        double volumeBrut = atof(col4);
+        if (strcmp(mode, "src") == 0) {
+          u_temp.volumeSource = volumeBrut;
+        } else {
+          double fuite = 0.0;
+          if (col5 != NULL && estNumerique(col5)) {
+            fuite = atof(col5);
+          }
+          u_temp.volumeTraite = volumeBrut * (1.0 - (fuite / 100.0));
+          }
+        }
+      }
+    
     int h = 0;
     *a = insertionAVL(*a, u_temp, &h);
-    //*a = insertionAVL(*a, u_temp, &((*a)->equilibre));
   }
   printf("Les donnees ont ete rentres dans l'AVL\n");
   fclose(fichier);
