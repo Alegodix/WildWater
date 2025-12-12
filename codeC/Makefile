@@ -1,40 +1,36 @@
 # --- Variables de compilation ---
 CC = gcc
-# -Wall -Wextra : Active tous les avertissements (rigueur attendue)
-# -std=c11 : Standard moderne du C
-# -g : Ajoute les symboles de débogage (utile pour gdb/valgrind)
+# Flags pour le mode de développement :
+# -Wall, -Wextra (tous les avertissements) -std=c11 (standard C) -g (débogage)
 CFLAGS = -Wall -Wextra -std=c11 -g
+# LDFLAGS : -lm est requis pour les fonctions mathématiques (comme pow, log, etc. si vous en utilisez)
 LDFLAGS = -lm
 
-# --- Fichiers --
-
-# Nom de l'exécutable final
+# --- Fichiers ---
 EXEC = cwire
-
-# Liste des fichiers sources
 SRC = main.c avl.c input.c output.c
-# Transformation automatique .c -> .o
 OBJ = $(SRC:.c=.o)
 
 # --- Règles ---
 
-# Règle par défaut (lancée par 'make')
+# Règle par défaut (lance la compilation)
 all: $(EXEC)
 
 # Édition de liens (Création de l'exécutable)
+# ATTENTION : La ligne suivante doit commencer par une TABULATION (pas des espaces)
 $(EXEC): $(OBJ)
-	@echo "Création de l'exécutable $(EXEC)..."
-	$(CC) $(OBJ) -o $(EXEC) $(LDFLAGS)
+	$(CC) $(OBJ) -o $@ $(LDFLAGS)
 
 # Compilation des fichiers objets (.c -> .o)
-# La dépendance header.h force la recompilation si le header change
+# La dépendance header.h assure la recompilation si la structure change.
+# ATTENTION : La ligne suivante doit commencer par une TABULATION
 %.o: %.c header.h
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Nettoyage (Obligatoire selon le sujet [cite: 260])
+# Nettoyage (supprime les objets et l'exécutable)
+# ATTENTION : La ligne suivante doit commencer par une TABULATION
 clean:
-	@echo "Nettoyage des fichiers temporaires..."
-	rm -f $(OBJ) $(EXEC)
+	rm -f $(OBJ) $(EXEC) *.csv
 
-# Phony targets pour éviter les conflits de noms de fichiers
+# Règle pour ignorer les fichiers du même nom que les cibles (targets)
 .PHONY: all clean
