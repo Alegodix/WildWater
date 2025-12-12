@@ -10,6 +10,7 @@ pUsine creerUsine(){
 	nouveau->capacite = 0;
 	return nouveau;
 }
+
 pAVL creerArbre(Usine u) { 
 	pAVL nouveau = malloc(sizeof(AVL));
 	if (nouveau == NULL) exit(1);
