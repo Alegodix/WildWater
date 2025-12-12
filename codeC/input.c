@@ -51,31 +51,33 @@ void chargerDonnees(char* cheminFichier, pAVL* a, char* mode) {
     if (strcmp(col1, "-") != 0 && strlen(col1) > 0) continue;
     if (!estNumerique(col4)) continue;
 
-    Usine u_temp = creerUsine();
-    strncpy(u_temp.ID, col3, 49);
+    pUsine u_temp = creerUsine();
+    strncpy(u_temp->ID, col3, 49);
+
+    int ligne_valide = 0;
 
     if (strcmp(mode, "max") == 0) {
       if (strcmp(col3, "-") == 0) {
-        u_temp.capacite = atof(col4);
+        u_temp->capacite = atof(col4);
         ligne_valide = 1;
       }
     } else if (strcmp(mode, "src") == 0 || strcmp(mode, "real") == 0) {
       if (strcmp(col3, "-") != 0) {
         double volumeBrut = atof(col4);
         if (strcmp(mode, "src") == 0) {
-          u_temp.volumeSource = volumeBrut;
+          u_temp->volumeSource = volumeBrut;
         } else {
           double fuite = 0.0;
           if (col5 != NULL && estNumerique(col5)) {
             fuite = atof(col5);
           }
-          u_temp.volumeTraite = volumeBrut * (1.0 - (fuite / 100.0));
+          u_temp->volumeTraite = volumeBrut * (1.0 - (fuite / 100.0));
           }
         }
       }
     
     int h = 0;
-    *a = insertionAVL(*a, u_temp, &h);
+    *a = insertionAVL(*a, *u_temp, &h);
   }
   printf("Les donnees ont ete rentres dans l'AVL\n");
   fclose(fichier);
