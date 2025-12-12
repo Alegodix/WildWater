@@ -2,7 +2,7 @@
 
 // créer un arbre et lui assigner l'usine en paramètre
 pUsine creerUsine(){
-	pUsine nouveau = malloc(sizeof(AVL));
+	pUsine nouveau = malloc(sizeof(Usine));
 	if (nouveau == NULL) exit(1);
 	nouveau->ID[49] = '\0';
   	nouveau->volumeSource = 0;
