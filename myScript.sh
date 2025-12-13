@@ -9,7 +9,7 @@
 start_time=$(date +%s%N)
 
 # Nom de l'exécutable C
-EXEC="wildwater"
+EXEC="final"
 
 # Fonction d'affichage de l'aide
 show_help() {
@@ -18,8 +18,6 @@ show_help() {
     echo "  $0 <fichier.csv> leaks <identifiant_usine>"
     exit 1
 }
-
-# 1. Vérification des arguments [cite: 191, 194]
 if [ "$#" -ne 3 ]; then
     echo "Erreur : Nombre d'arguments incorrect."
     show_help
@@ -34,7 +32,7 @@ if [ ! -f "$DATA_FILE" ]; then
     exit 1
 fi
 
-# 2. Vérification et Compilation du programme C [cite: 196, 197]
+# 2. Vérification et Compilation du programme C
 if [ ! -f "$EXEC" ]; then
     echo "L'exécutable '$EXEC' est absent. Compilation en cours..."
     make
@@ -87,15 +85,14 @@ if [ "$COMMAND" = "histo" ]; then
     fi
 
 elif [ "$COMMAND" = "leaks" ]; then
-    # Appel du programme C pour les fuites [cite: 183]
+    # Appel du programme C pour les fuites
     # L'identifiant peut contenir des espaces, donc on utilise des guillemets "$ARGUMENT"
     ./$EXEC "$DATA_FILE" "$COMMAND" "$ARGUMENT"
     RET=$?
 
     if [ $RET -ne 0 ]; then
-        echo "Erreur : Le programme C a échoué ou l'usine n'existe pas (Code $RET)." [cite: 213]
+        echo "Erreur : Le programme C a échoué ou l'usine n'existe pas (Code $RET)."
         # Note : Si l'usine n'existe pas, le sujet dit d'écrire -1 dans le fichier, 
-        # mais le programme doit quand même finir proprement (code 0) sauf erreur technique.
         exit $RET
     fi
     
