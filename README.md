@@ -20,7 +20,7 @@
 │   ├── avl.c          # Fonctions de gestion des AVL (rotation, insertion...)
 │   ├── input.c        # Gestion de la lecture du CSV
 │   └── output.c       # Gestion de l'écriture des fichiers temporaires
-├── tests/             # Dossier pour les preuves de tests (images, logs) [cite: 249]
+├── tests/             # Dossier pour les preuves de tests (images, logs)
 ├── myScript.sh        # Le script Shell (point d'entrée principal)
 └── ReadMe.md          # Instructions de compilation/utilisation
 ``` 
