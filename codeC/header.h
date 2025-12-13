@@ -37,7 +37,6 @@ pAVL rotationGauche(pAVL a);
 pAVL rotationDroite(pAVL a);
 pAVL rotationGaucheDouble(pAVL a);
 pAVL rotationDroiteDouble(pAVL a);
-pUsine creerUsine();
 pAVL creerArbre(Usine u);
 pAVL insertionAVL(pAVL a, Usine u, int* h);
 pAVL equilibrerAVL(pAVL a);
