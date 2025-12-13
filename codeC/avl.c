@@ -1,21 +1,13 @@
 #include "header.h"
 
-// créer un arbre et lui assigner l'usine en paramètre
-pUsine creerUsine(){
-	pUsine nouveau = malloc(sizeof(Usine));
-	if (nouveau == NULL) exit(1);
-	nouveau->ID[49] = '\0';
-  	nouveau->volumeSource = 0;
-	nouveau->volumeTraite = 0;
-	nouveau->capacite = 0;
-	return nouveau;
-}
-
 pAVL creerArbre(Usine u) { 
+	// Allocation mémoire de l'arbre et de la structure Usine contenue
 	pAVL nouveau = malloc(sizeof(AVL));
 	if (nouveau == NULL) exit(1);
-	nouveau->u = creerUsine();
+	nouveau->u = malloc(sizeof(Usine));
 	if (nouveau->u == NULL) exit(1);
+
+	// Remplissage des variables
   	strncpy(nouveau->u->ID, u.ID, 49);
 	nouveau->u->ID[49] = '\0';
   	nouveau->u->volumeSource = u.volumeSource;
@@ -23,6 +15,7 @@ pAVL creerArbre(Usine u) {
 	nouveau->u->capacite = u.capacite;
 	nouveau->fg = nouveau->fd = NULL;
 	nouveau->equilibre = 0;
+	
 	return nouveau;
 }
 
@@ -121,7 +114,9 @@ void libererMemoireAVL(pAVL a) {
     if (a != NULL) {
         libererMemoireAVL(a->fg);
         libererMemoireAVL(a->fd);
-		free(a->u);
+		if (a->u != NULL) {
+			free(a->u);
+		}
         free(a);
     }
 }
