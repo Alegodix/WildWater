@@ -9,7 +9,7 @@ EXEC_PATH="codeC/cwire"
 
 # Fonction d'affichage de l'aide
 show_help() {
-    echo "Usage :"
+    echo "Qu'est-ce que vous pouvez faire :"
     echo "  $0 <fichier.csv> histo <max|src|real>"
     echo "  $0 <fichier.csv> leaks <identifiant_usine>"
     exit 1
