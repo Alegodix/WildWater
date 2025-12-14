@@ -93,8 +93,8 @@ pAVL insertionAVL(pAVL a, Usine u, int* h) {
 		a->fd = insertionAVL(a->fd, u, h);
 	} else {
 		// L'usine existe déjà mais on doit additionner les volumes
-		a->u->volumeSource = a->u->volumeSource + u.volumeSource;
-		a->u->volumeTraite = a->u->volumeTraite + u.volumeTraite;
+		a->u->volumeSource += u.volumeSource;
+		a->u->volumeTraite += u.volumeTraite;
 		if (u.capacite > 0) {
         	a->u->capacite = u.capacite;
     	}
@@ -102,7 +102,7 @@ pAVL insertionAVL(pAVL a, Usine u, int* h) {
 		return a;
 	}
 	if (*h != 0) {
-		a->equilibre = a->equilibre + *h;
+		a->equilibre += *h;
 		a = equilibrerAVL(a);
 		if (a->equilibre == 0) *h = 0;
 		else *h = 1;
