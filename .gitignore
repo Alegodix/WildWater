@@ -16,7 +16,10 @@ cwire.exe
 vol_source.csv
 vol_max.csv
 vol_real.csv
-# Ajoutez d'autres fichiers de sortie CSV si vous en créez
+
+# Fichiers .png générés 
+*.png
+
 
 # Fichiers de débogage et temporaires
 ############################################

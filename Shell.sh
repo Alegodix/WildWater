@@ -1,15 +1,11 @@
 #!/bin/bash
 
-# Arguments :
-# $1 : fichier CSV de données
-# $2 : commande (histo ou leaks)
-# $3 : sous-commande (max, src, real) ou identifiant usine
+# ===================================================================
+# Script Shell C-Wire
+# ===================================================================
 
-# Début du chronométrage (en nanosecondes pour la précision)
-start_time=$(date +%s%N)
-
-# Nom de l'exécutable C
-EXEC="final"
+# Chemin de l'exécutable C généré par le Makefile
+EXEC_PATH="codeC/cwire"
 
 # Fonction d'affichage de l'aide
 show_help() {
@@ -18,8 +14,13 @@ show_help() {
     echo "  $0 <fichier.csv> leaks <identifiant_usine>"
     exit 1
 }
+
+# Début du chronométrage
+start_time=$(date +%s%N)
+
+# 1. Vérification des arguments
 if [ "$#" -ne 3 ]; then
-    echo "Erreur : Nombre d'arguments incorrect."
+    echo "Erreur : Nombre d'arguments incorrect (3 attendus)."
     show_help
 fi
 
@@ -27,14 +28,16 @@ DATA_FILE="$1"
 COMMAND="$2"
 ARGUMENT="$3"
 
+# Vérification du fichier d'entrée
 if [ ! -f "$DATA_FILE" ]; then
-    echo "Erreur : Le fichier de données '$DATA_FILE' n'existe pas."
+    echo "Erreur : Le fichier de données '$DATA_FILE' introuvable."
     exit 1
 fi
 
 # 2. Vérification et Compilation du programme C
-if [ ! -f "$EXEC" ]; then
-    echo "L'exécutable '$EXEC' est absent. Compilation en cours..."
+# On vérifie si l'exécutable existe dans codeC/
+if [ ! -f "$EXEC_PATH" ] && [ ! -f "${EXEC_PATH}.exe" ]; then
+    echo "L'exécutable est absent. Compilation en cours..."
     make
     if [ $? -ne 0 ]; then
         echo "Erreur : La compilation a échoué."
@@ -42,70 +45,52 @@ if [ ! -f "$EXEC" ]; then
     fi
 fi
 
-# 3. Traitement selon la commande
+# 3. Traitement
+echo "Lancement du traitement C..."
+
+# Appel du programme C
+./"$EXEC_PATH" "$DATA_FILE" "$COMMAND" "$ARGUMENT"
+RET=$?
+
+# Vérification du succès du programme C
+if [ $RET -ne 0 ]; then
+    echo "Le programme C a renvoyé une erreur (Code $RET)."
+    exit $RET
+fi
+
+# 4. Gestion des graphiques (Mode histo uniquement)
 if [ "$COMMAND" = "histo" ]; then
-    # Vérification du sous-argument
-    if [[ "$ARGUMENT" != "max" && "$ARGUMENT" != "src" && "$ARGUMENT" != "real" ]]; then
-        echo "Erreur : Argument '$ARGUMENT' invalide pour histo. Utilisez max, src ou real." [cite: 179, 180]
-        exit 1
-    fi
+    if [ "$ARGUMENT" = "src" ]; then FILE="vol_source.csv"; fi
+    if [ "$ARGUMENT" = "max" ]; then FILE="vol_max.csv"; fi
+    if [ "$ARGUMENT" = "real" ]; then FILE="vol_real.csv"; fi
 
-    echo "Génération de l'histogramme ($ARGUMENT)..."
-    
-    # Appel du programme C [cite: 139]
-    ./$EXEC "$DATA_FILE" "$COMMAND" "$ARGUMENT"
-    RET=$?
-
-    if [ $RET -ne 0 ]; then
-        echo "Erreur : Le programme C a rencontré un problème (Code $RET)." [cite: 198]
-        exit $RET
-    fi
-
-    # Génération du graphique avec Gnuplot (Histogramme) 
-    # Le programme C est censé avoir généré un fichier .dat (ex: vol_max.dat)
-    # On suppose ici que le fichier généré s'appelle "output.dat" pour l'exemple.
-    # Adaptez le nom selon ce que votre C produit.
-    
-    OUTPUT_DAT="output.dat" 
-    
-    if [ -f "$OUTPUT_DAT" ]; then
-        gnuplot -e "
-            set terminal png size 1200,800;
-            set output '${ARGUMENT}.png';
-            set style data histograms;
-            set style fill solid;
-            set title 'Histogramme des usines ($ARGUMENT)';
-            set xlabel 'Usines';
-            set ylabel 'Volume (M.m3)';
-            plot '$OUTPUT_DAT' using 2:xtic(1) title '$ARGUMENT';
-        "
+    if [ -f "$FILE" ]; then
+        echo "Génération du graphique pour $FILE..."
+        
+        # Script Gnuplot pour générer le PNG
+        cat <<EOF > plot_script.gp
+set terminal png size 1200,800 enhanced font 'Arial,10'
+set output '${ARGUMENT}.png'
+set datafile separator ';'
+set title 'Histogramme : ${ARGUMENT}'
+set style data histograms
+set style fill solid 1.0 border -1
+plot '${FILE}' using 2:xtic(1) title '${ARGUMENT}'
+EOF
+        
+        gnuplot plot_script.gp
+        rm plot_script.gp
         echo "Graphique généré : ${ARGUMENT}.png"
     else
-        echo "Erreur : Le fichier de données pour le graphique n'a pas été trouvé."
+        echo "Avertissement : Le fichier de données pour le graphique ($FILE) n'a pas été trouvé."
     fi
 
 elif [ "$COMMAND" = "leaks" ]; then
-    # Appel du programme C pour les fuites
-    # L'identifiant peut contenir des espaces, donc on utilise des guillemets "$ARGUMENT"
-    ./$EXEC "$DATA_FILE" "$COMMAND" "$ARGUMENT"
-    RET=$?
+    echo "Calcul des fuites terminé. Vérifiez leaks.csv."
 
-    if [ $RET -ne 0 ]; then
-        echo "Erreur : Le programme C a échoué ou l'usine n'existe pas (Code $RET)."
-        # Note : Si l'usine n'existe pas, le sujet dit d'écrire -1 dans le fichier, 
-        exit $RET
-    fi
-    
-    echo "Calcul des fuites terminé. Vérifiez le fichier de sortie."
-
-else
-    echo "Erreur : Commande '$COMMAND' inconnue."
-    show_help
 fi
 
-# 4. Affichage du temps d'exécution [cite: 199]
+# 5. Affichage du temps d'exécution
 end_time=$(date +%s%N)
-duration=$(( (end_time - start_time) / 1000000 )) # Conversion en millisecondes
-
+duration=$(( (end_time - start_time) / 1000000 )) # Conversion en ms
 echo "Durée totale du traitement : ${duration} ms"
-
