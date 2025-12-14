@@ -1,101 +1,78 @@
 #include "header.h"
 
-/*
-Écrit les données d'une usine dans le fichier selon le mode choisis (src, max, real).
-Utilisée par outputHisto.
-*/
-void afficherNoeud(Usine* u, FILE* fichier, char* mode) {
-    if (u == NULL || fichier == NULL) exit(1);
-    double valeur = 0;
-    if (strcmp(mode, "src") == 0) {
-        valeur = u->volumeSource;
-    } else if (strcmp(mode, "max") == 0) {
-        valeur = u->capacite;
-    } else if (strcmp(mode, "real") == 0) {
-        valeur = u->volumeTraite;
-    } else {
-        fprintf(stderr, "Erreur : Mode '%s' non reconnu.\n", mode);
-        fclose(fichier);
-        exit(1);
-    }
-    fprintf(fichier, "%s;%.3f\n", u->ID, valeur / 1000.0);
-}
-
-/*
-Écrit les données d'une usine dans le fichier pour le rapport de fuites.
-Utilisée par outputLeaks.
-*/
-void afficherNoeudLeaks(Usine* u, FILE* fichier) {
-    if (u == NULL || fichier == NULL) exit(1);
-    if (u->volumeTraite > u->capacite) {
-        double diff = u->volumeTraite - u->capacite;
-        fprintf(fichier, "%s;%.3f;%.3f;%.3f\n", u->ID, u->capacite / 1000.0, u->volumeTraite / 1000.0, diff / 1000.0);
-    }
-}
-
-/*
-Ecrit les données dans l'ordre alphabétique inverse des identifiants.
-*/
-void parcoursInfixeInverse(pAVL a, FILE* fichier, char* mode) {
-  if (a != NULL) {
-    parcoursInfixeInverse(a->fd, fichier, mode);
-    afficherNoeud(a->u, fichier, mode);
-    parcoursInfixeInverse(a->fg, fichier, mode);
-  }
-}
-
-/*
-Ecrit les données dans l'ordre alphabétique des identifiants.
-*/
-void parcoursInfixe(pAVL a, FILE* fichier) {
+// --- Affichage pour HISTO ---
+void parcoursInfixeHisto(pAVL a, FILE* fichier, char* mode) {
     if (a != NULL) {
-        parcoursInfixe(a->fg, fichier);
-        afficherNoeudLeaks(a->u, fichier);
-        parcoursInfixe(a->fd, fichier);
+        parcoursInfixeHisto(a->fg, fichier, mode);
+        
+        double valeur = 0;
+        int condition = 0;
+
+        if (strcmp(mode, "src") == 0) {
+            valeur = a->u->volumeSource;
+            if (valeur > 0) condition = 1; // On ignore les stations qui ne produisent rien
+        } else if (strcmp(mode, "max") == 0) {
+            valeur = a->u->capacite;
+            if (valeur > 0) condition = 1;
+        } else if (strcmp(mode, "real") == 0) {
+            valeur = a->u->volumeTraite;
+            if (valeur > 0) condition = 1;
+        }
+
+        if (condition) {
+            // [SUJET] Format : Identifier ; Value
+            // Attention aux unités, si besoin diviser par 1000 selon ton choix précédent
+            // Ici je garde brut ou /1000 selon ta logique précédente (vol_source était ok avec /1000)
+            fprintf(fichier, "%s;%.3f\n", a->u->ID, valeur / 1000.0);
+        }
+
+        parcoursInfixeHisto(a->fd, fichier, mode);
     }
 }
 
-/* 
-Générer le fichier CSV pour faire l'histogramme
-*/
+// --- Affichage pour LEAKS ---
+void parcoursInfixeLeaks(pAVL a, FILE* fichier) {
+    if (a != NULL) {
+        parcoursInfixeLeaks(a->fg, fichier);
+        
+        // [SUJET] LEAKS : Identifier les stations où Volume > Capacité
+        // Il faut que la capacité soit définie (>0) et que le volume entrant soit supérieur.
+        if (a->u->capacite > 0 && a->u->volumeTraite > a->u->capacite) {
+            double diff = a->u->volumeTraite - a->u->capacite;
+            // Format : Station;Capacité;Volume;Surplus (en M.m3 si division par 1000)
+            fprintf(fichier, "%s;%.3f;%.3f;%.3f\n", 
+                    a->u->ID, 
+                    a->u->capacite / 1000.0, 
+                    a->u->volumeTraite / 1000.0, 
+                    diff / 1000.0);
+        }
+        
+        parcoursInfixeLeaks(a->fd, fichier);
+    }
+}
+
 void outputHisto(char* nomFichier, pAVL a, char* mode) {
     FILE* fichier = fopen(nomFichier, "w");
-    if (fichier == NULL) {
-        fprintf(stderr, "Erreur : Impossible de créer le fichier %s\n", nomFichier);
-        exit(1);
-    }
+    if (fichier == NULL) exit(1);
 
-    // Ecriture de l'en-tête CSV
-    if (strcmp(mode, "src") == 0) {
-        fprintf(fichier, "identifier;source volume (M.m3.year-1)\n");
-    } else if (strcmp(mode, "max") == 0) {
-        fprintf(fichier, "identifier;capacite(M.m3.year-1)\n");
-    } else if (strcmp(mode, "real") == 0) {
-        fprintf(fichier, "identifier;volume traite(M.m3.year-1)\n");
-    } else {
-        fprintf(stderr, "Erreur : Mode '%s' non reconnu.\n", mode);
-        fclose(fichier);
-        exit(1);
-    }
+    // En-tête CSV
+    if (strcmp(mode, "src") == 0) fprintf(fichier, "Station;Volume Source (M.m3)\n");
+    else if (strcmp(mode, "max") == 0) fprintf(fichier, "Station;Capacite (M.m3)\n");
+    else fprintf(fichier, "Station;Volume Traite (M.m3)\n");
 
-    // Ecriture des données
-    parcoursInfixeInverse(a, fichier, mode);
-    
+    parcoursInfixeHisto(a, fichier, mode);
     fclose(fichier);
 }
 
 void outputLeaks(char* nomFichier, pAVL a) {
     FILE* fichier = fopen(nomFichier, "w");
-    if (fichier == NULL) {
-        fprintf(stderr, "Erreur : Impossible de créer le fichier %s\n", nomFichier);
-        exit(1);
-    }
-
-    // Ecriture de l'en-tête CSV
-    fprintf(fichier, "identifier;capacite;volume traite;exces(M.m3.year-1)\n");
-
-    // Ecriture des données
-    parcoursInfixe(a, fichier);
+    if (fichier == NULL) exit(1);
+    
+    // En-tête CSV Leaks
+    fprintf(fichier, "Station;Capacite;Volume;Surplus\n");
+    
+    parcoursInfixeLeaks(a, fichier);
     
     fclose(fichier);
+    printf("Fichier %s généré.\n", nomFichier);
 }
