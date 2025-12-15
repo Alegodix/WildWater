@@ -15,7 +15,7 @@ void afficherNoeud(Usine* u, FILE* fichier, char* mode) {
     } else if (strcmp(mode, "real") == 0) {
         valeur = u->volumeTraite;
     } else {
-        //msg d'erreur aur cas où
+        //msg d'erreur au cas où
         fprintf(stderr, ROUGE "Erreur interne: Mode '%s' non reconnu par afficherNoeud.\n" RESET, mode);
         return; 
     }
@@ -23,19 +23,6 @@ void afficherNoeud(Usine* u, FILE* fichier, char* mode) {
     // On n'affiche que si la valeur est supérieure à zéro (pour la clarté de l'histogramme)
     if (valeur > 0) {
         fprintf(fichier, "%s;%.3f\n", u->ID, valeur / 1000.0);
-    }
-}
-
-
-/*
-Écrit les données d'une usine dans le fichier pour le rapport de fuites.
-Utilisée par outputLeaks.
-*/
-void afficherNoeudLeaks(Usine* u, FILE* fichier) {
-    if (u == NULL || fichier == NULL) exit(1); 
-    if (u->capacite > 0 && u->volumeTraite > u->capacite) { // Ajout u->capacite > 0 pour éviter division par zéro/cas invalides
-        double diff = u->volumeTraite - u->capacite;
-        fprintf(fichier, "%s;%.3f;%.3f;%.3f\n", u->ID, u->capacite / 1000.0, u->volumeTraite / 1000.0, diff / 1000.0);
     }
 }
 
@@ -48,17 +35,6 @@ void parcoursInfixeInverse(pAVL a, FILE* fichier, char* mode) {
     afficherNoeud(a->u, fichier, mode);
     parcoursInfixeInverse(a->fg, fichier, mode);
   }
-}
-
-/*
-Ecrit les données dans l'ordre alphabétique des identifiants.
-*/
-void parcoursInfixe(pAVL a, FILE* fichier) {
-    if (a != NULL) {
-        parcoursInfixe(a->fg, fichier);
-        afficherNoeudLeaks(a->u, fichier);
-        parcoursInfixe(a->fd, fichier);
-    }
 }
 
 /* 
@@ -91,20 +67,57 @@ void outputHisto(char* nomFichier, pAVL a, char* mode) {
     printf(VERT "Fichier %s généré.\n" RESET, nomFichier);
 }
 
-void outputLeaks(char* nomFichier, pAVL a) {
+double sommePertes(pUsine u, double eauArrivante) {
+    if (u == NULL || u->nbEnfants == 0) {
+        return 0.0;
+    }
+
+    // L'eau est répartie équitablement entre les enfants
+    double eauParEnfant = eauArrivante / u->nbEnfants;
+    double totalPertes = 0.0;
+
+    // Parcours de la liste chaînée des voisins (les tuyaux partants)
+    pTuyau t = u->listeEnfants;
+    while (t != NULL) {
+        // 1. Calcul de la fuite sur CE tronçon
+        // (pourcentageFuite est stocké tel quel, ex: 2.5 pour 2.5%)
+        double perteTuyau = eauParEnfant * (t->pourcentageFuite / 100.0);
+        
+        // 2. Calcul de l'eau restante qui arrive au noeud suivant
+        double eauRestante = eauParEnfant - perteTuyau;
+        
+        // 3. Appel récursif : On ajoute la perte de ce tuyau + les pertes générées en aval
+        totalPertes += perteTuyau + sommePertes(t->noeud, eauRestante);
+        
+        t = t->suivant;
+    }
+    
+    return totalPertes;
+}
+
+/* 
+Générer le fichier CSV pour leaks
+*/
+void outputLeaks(char* nomFichier, pAVL a, char* ID) {
     FILE* fichier = fopen(nomFichier, "w");
     if (fichier == NULL) {
-        fprintf(stderr, ROUGE "Erreur : Impossible de créer le fichier %s\n" RESET, nomFichier);
+        perror("Erreur creation fichier leaks");
         exit(1);
     }
 
-    // Ecriture de l'en-tête CSV
-    fprintf(fichier, "Station;Capacite (M.m3);Volume Traite (M.m3);Surplus (M.m3)\n"); 
+    // Ecriture de l'en-tête
+    fprintf(fichier, "identifier;Leak volume(M.m3.year-1)\n");
 
-    // Ecriture des données
-    parcoursInfixe(a, fichier);
-    
+    pUsine depart = rechercher(a, ID);
+
+    if (depart == NULL) {
+        fprintf(fichier, "%s;-1\n", ID); 
+        printf("Usine '%s' introuvable.\n", ID);
+    } else {
+        double volumeInitial = depart->capacite;
+        double totalFuites = sommePertes(depart, volumeInitial);
+        fprintf(fichier, "%s;%.3f\n", depart->ID, totalFuites / 1000.0);
+    }
+
     fclose(fichier);
-    // Ajout du message de succès
-    printf(VERT "Fichier %s généré.\n" RESET, nomFichier);
 }
