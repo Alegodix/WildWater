@@ -1,4 +1,4 @@
-FILE="data.csv"
+
 FILE_TRIE="temp_sorted.csv"
 FILE_MIN="min_50.dat"
 FILE_MAX="max_10.dat"
