@@ -89,7 +89,7 @@ double sommePertes(pUsine u, double eauArrivante) {
         // 3. Appel récursif : On ajoute la perte de ce tuyau + les pertes générées en aval
         totalPertes += perteTuyau + sommePertes(t->noeud, eauRestante);
         
-        t = t->suivant;
+        t = t->pSuivant;
     }
     
     return totalPertes;
