@@ -1,10 +1,10 @@
-FICHIER_ENTREE="data.csv"
-FICHIER_TRIE="temp_sorted.csv"
-FICHIER_MIN="min_50.dat"
-FICHIER_MAX="max_10.dat"
+FILE="data.csv"
+FILE_TRIE="temp_sorted.csv"
+FILE_MIN="min_50.dat"
+FILE_MAX="max_10.dat"
 
-tail -n +2 "$FICHIER_ENTREE" | sort -t';' -k2,2n > "$FICHIER_TRIE"
+tail -n +2 "$FILE" | sort -t';' -k2,2n > "$FILE_TRIE"
 
-head -n 50 "$FICHIER_TRIE" > "$FICHIER_MIN"
+head -n 50 "$FILE_TRIE" > "$FILE_MIN"
 
-tail -n 10 "$FICHIER_TRIE" > "$FICHIER_MAX"
+tail -n 10 "$FILE_TRIE" > "$FILE_MAX"
