@@ -8,6 +8,8 @@ cwire.exe
 # Exécutables de test 
 *.exe
 *.out
+# Fichier .dat
+c-wildwater_v3.dat
 
 # Fichiers générés par le programme (CSV de sortie)
 ############################################
