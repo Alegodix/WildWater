@@ -47,9 +47,9 @@ void outputHisto(char* nomFichier, pAVL a, char* mode) {
 
     // Ecriture de l'en-tête CSV (Headers)
     if (strcmp(mode, "src") == 0) {
-        fprintf(fichier, "identifier;volume source(M.m3.year-1);capacity(M.m3.year-1)\n");
+        fprintf(fichier, "identifier;volume source(M.m3.year-1);capacite(M.m3.year-1)\n");
     } else if (strcmp(mode, "real") == 0) {
-        fprintf(fichier, "identifier;volume traite(M.m3.year-1);capacity(M.m3.year-1)\n");
+        fprintf(fichier, "identifier;volume traite(M.m3.year-1);capacite(M.m3.year-1)\n");
     } else if (strcmp(mode, "max") == 0) {
         fprintf(fichier, "identifier;capacite(M.m3.year-1)\n");
     } else {
