@@ -95,16 +95,26 @@ void chargerDonnees(char* cheminFichier, pAVL* a, char* commande, char* mode) {
             }
         }
     }
-    // --- MODE LEAKS ---
+    // --- MODE LEAKS (CORRIGÉ) ---
     else if (leaksActive) {
-      // 1. Tuyau (Connexion) : Ici col4 peut être "-" donc on ne le vérifie pas
+      // 1. Tuyau (Connexion)
       if (strcmp(col3, "-") != 0) {
         pUsine parent = trouverOuCreer(a, col2);
         pUsine enfant = trouverOuCreer(a, col3);
         double fuite = (col5 && estNumerique(col5)) ? atof(col5) : 0.0;
+        
+        // Ajout du voisin (Tuyau aval)
         ajouterVoisin(parent, enfant, fuite);
+
+        // NOUVEAU : Si la colonne 4 contient un nombre, c'est une ligne Source -> Usine.
+        // On calcule donc le volume réel qui arrive à l'usine (enfant).
+        if (estNumerique(col4)) {
+            double volSource = atof(col4);
+            // On ajoute ce volume à l'usine, moins les fuites du trajet source->usine
+            enfant->volumeTraite += volSource * (1.0 - (fuite / 100.0));
+        }
       }
-      // 2. Capacité de l'usine (pour le volume de départ)
+      // 2. Capacité de l'usine (Toujours utile au cas où)
       else if (strcmp(col2, "-") != 0 && estNumerique(col4)) {
          pUsine u = trouverOuCreer(a, col2);
          u->capacite = atof(col4);

@@ -115,7 +115,12 @@ void outputLeaks(char* nomFichier, pAVL a, char* ID) {
         fprintf(fichier, "%s;-1\n", ID); 
         printf("Usine '%s' introuvable.\n", ID);
     } else {
-        double volumeInitial = depart->capacite;
+        // MODIFICATION ICI :
+        // On prend le volume REEL (volumeTraite) s'il existe, qui est INFERIEUR OU EGAL au max théorique (c'est cohérent car on a comme dit ds le whatsapp des valeurs un peu trop élevées)
+        // Sinon, on se rabat sur la capacité (par sécurité).
+        double volumeInitial = depart->volumeTraite;
+        if (volumeInitial == 0) volumeInitial = depart->capacite;
+
         double totalFuites = sommePertes(depart, volumeInitial);
         fprintf(fichier, "%s;%.3f\n", depart->ID, totalFuites / 1000.0);
     }
