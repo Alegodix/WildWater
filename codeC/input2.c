@@ -82,24 +82,26 @@ void chargerDonnees(char* cheminFichier, pAVL* a, char* commande, char* mode) {
     // ====================================================
 
     if (histoActive) {
-        // 1. Détection d'une ligne de CAPACITÉ (Usine; - ; - ; Capacité ; -)
+        
+        // 1. Détection d'une ligne de CAPACITÉ
+        // Format attendu : - ; ID_USINE ; - ; CAPACITE ; -
+        // L'usine est bien dans la 2ème colonne (col2)
         if (strcmp(col3, "-") == 0 && strcmp(col2, "-") != 0) {
-            // On récupère ou crée le noeud pour stocker la capacité
-            // On le fait peu importe le mode (max, src, real) car on a besoin de la capacité partout
-            pUsine u = trouverOuCreer(a, col2);
+            pUsine u = trouverOuCreer(a, col2); // On utilise col2
             u->capacite = atof(col4);
         }
         
-        // 2. Détection d'une ligne de TRAJET (Source -> Usine)
+        // 2. Détection d'une ligne de TRAJET (Flux)
+        // Format attendu : - ; SOURCE ; DESTINATION ; VOLUME ; FUITE
         else if (strcmp(col3, "-") != 0 && strcmp(col2, "-") != 0) {
-            // Si on est en mode MAX, on s'en fiche des trajets
-            // Si on est en mode SRC ou REAL, on traite le volume
+            // En mode SRC ou REAL, on s'intéresse au trajet
             if (strcmp(mode, "src") == 0 || strcmp(mode, "real") == 0) {
-                pUsine u = trouverOuCreer(a, col3); // On cherche l'usine de destination
+                // Ici, l'usine qui REÇOIT l'eau est en 3ème colonne (col3)
+                pUsine u = trouverOuCreer(a, col3); 
                 double volumeBrut = atof(col4);
                 
                 if (strcmp(mode, "src") == 0) {
-                   u->volumeSource += volumeBrut; // On accumule si plusieurs sources ?
+                   u->volumeSource += volumeBrut;
                 } else if (strcmp(mode, "real") == 0) {
                    double fuite = 0.0;
                    if (col5 != NULL && estNumerique(col5)) {
