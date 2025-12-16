@@ -59,22 +59,11 @@ void chargerDonnees(char* cheminFichier, pAVL* a, char* commande, char* mode) {
     if (strlen(ligne) == 0) continue;
     strcpy(ligne_copie, ligne);
 
-    char* token;
-        char* rest = ligne;
-        char* cols[5];
-        int i = 0;
-    
-    // Utilisation de strsep pour gérer les champs vides ";;"
-        while ((token = strsep(&rest, ";")) != NULL && i < 5) {
-            cols[i++] = token;
-        }
-        if (i < 4) continue; // Ligne incomplète
-
-        char* col1 = cols[0]; // Usine traitante
-        char* col2 = cols[1]; // Amont
-        char* col3 = cols[2]; // Aval
-        char* col4 = cols[3]; // Volume/Capacité
-        char* col5 = (i == 5) ? cols[4] : NULL; // Fuite
+    char* col1 = strtok(ligne_copie, ";");
+    char* col2 = strtok(NULL, ";");
+    char* col3 = strtok(NULL, ";");
+    char* col4 = strtok(NULL, ";");
+    char* col5 = strtok(NULL, ";");
 
     // On vérifie si la ligne est valide
     if (col1 == NULL || col2 == NULL || col3 == NULL || col4 == NULL) continue;
