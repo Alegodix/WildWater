@@ -8,12 +8,15 @@ Utilisée par outputHisto.
 void afficherNoeud(Usine* u, FILE* fichier, char* mode) {
     if (u == NULL || fichier == NULL) exit(1);
     double valeur = 0;
+    double valeur2 = 0;
     if (strcmp(mode, "src") == 0) {
-        valeur = u->volumeSource;
+        valeur2 = u->volumeSource;
+        valeur = u->capacite;
     } else if (strcmp(mode, "max") == 0) {
         valeur = u->capacite;
     } else if (strcmp(mode, "real") == 0) {
-        valeur = u->volumeTraite;
+        valeur2 = u->volumeTraite;
+        valeur = u->capacite;
     } else {
         //msg d'erreur au cas où
         fprintf(stderr, ROUGE "Erreur interne: Mode '%s' non reconnu par afficherNoeud.\n" RESET, mode);
@@ -22,7 +25,7 @@ void afficherNoeud(Usine* u, FILE* fichier, char* mode) {
     
     // On n'affiche que si la valeur est supérieure à zéro (pour la clarté de l'histogramme)
     if (valeur > 0) {
-        fprintf(fichier, "%s;%.3f\n", u->ID, valeur / 1000.0);
+        fprintf(fichier, "%s;%.3f;%.3f\n", u->ID, valeur / 1000.0, valeur2 / 1000.0);
     }
 }
 
@@ -36,25 +39,23 @@ void parcoursInfixeInverse(pAVL a, FILE* fichier, char* mode) {
     parcoursInfixeInverse(a->fg, fichier, mode);
   }
 }
-
-/* 
-Générer le fichier CSV pour faire l'histogramme
+/* Générer le fichier CSV pour faire l'histogramme
 */
 void outputHisto(char* nomFichier, pAVL a, char* mode) {
     FILE* fichier = fopen(nomFichier, "w");
-    if (fichier == NULL) { //ajout message d'erreur au cas où
+    if (fichier == NULL) {
         fprintf(stderr, ROUGE "Erreur : Impossible de créer le fichier %s\n" RESET, nomFichier);
         exit(1);
     }
 
-    // Ecriture de l'en-tête CSV
+    // Ecriture de l'en-tête CSV (Headers)
     if (strcmp(mode, "src") == 0) {
-        fprintf(fichier, "identifier;volume source(M.m3.year-1)\n");
+        fprintf(fichier, "identifier;volume source(M.m3.year-1);capacite(M.m3.year-1)\n");
+    } else if (strcmp(mode, "real") == 0) {
+        fprintf(fichier, "identifier;volume traite(M.m3.year-1);capacite(M.m3.year-1)\n");
     } else if (strcmp(mode, "max") == 0) {
         fprintf(fichier, "identifier;capacite(M.m3.year-1)\n");
-    } else if (strcmp(mode, "real") == 0) {
-        fprintf(fichier, "identifier;volume traite(M.m3.year-1)\n");
-    } else { //ajout message d'erreur au cas où
+    } else {
         fprintf(stderr, ROUGE "Erreur : Mode '%s' non reconnu.\n" RESET, mode);
         fclose(fichier);
         exit(1);
