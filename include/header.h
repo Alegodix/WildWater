@@ -1,3 +1,6 @@
+#ifndef HEADER_H   
+#define HEADER_H   
+
 #include <stdlib.h>
 #include <stddef.h>
 #include <stdio.h>
@@ -74,3 +77,5 @@ void parcoursInfixeInverse(pAVL a, FILE* f, char* mode);
 double sommePertes(pUsine u, double eauArrivante);
 void outputHisto(char* nomFichier, pAVL a, char* mode);
 void outputLeaks(char* nomFichier, pAVL a, char* ID);
+
+#endif
