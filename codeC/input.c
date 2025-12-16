@@ -118,22 +118,26 @@ void chargerDonnees(char* cheminFichier, pAVL* a, char* commande, char* mode) {
     } 
       
     // CAS 3 : Mode LEAKS
-    // ****** A FAIRE, VERSION SIMPLIFIEE ******
+    // [MODIFICATION] On charge TOUT le graphe, pas juste l'usine de départ.
+    // Si on filtre ici, on ne connaitra pas les enfants des enfants.
     else if (leaksActive) {
-      if ((strcmp(col1, mode) == 0) || (strcmp(col2, mode) == 0)) {
+      // Si col3 n'est pas "-", c'est un tuyau (connexion Parent -> Enfant)
+      if (strcmp(col3, "-") != 0) {
         pUsine parent = trouverOuCreer(a, col2);
-
-        if (strcmp(col3, "-") == 0) {
-          // C'est une définition de capacité (Pas de voisin)
-          parent->capacite = atof(col4);
-        } else {
-          // C'est un tuyau vers un Enfant (Aval)
-          pUsine enfant = trouverOuCreer(a, col3);
-                    
-          // Création du lien
-          double fuite = (col5 && estNumerique(col5)) ? atof(col5) : 0.0;
-          ajouterVoisin(parent, enfant, fuite);
-        }
+        pUsine enfant = trouverOuCreer(a, col3);
+        
+        // On lit le pourcentage de fuite (colonne 5)
+        double fuite = (col5 && estNumerique(col5)) ? atof(col5) : 0.0;
+        
+        // On ajoute la connexion dans l'arbre
+        ajouterVoisin(parent, enfant, fuite);
+      }
+      
+      // Si c'est une ligne qui définit la capacité d'une usine (ex: Usine; - ; - ; Capacité ; -)
+      // C'est important pour récupérer le volume de départ de l'usine cible.
+      else if (strcmp(col2, "-") != 0 && strcmp(col4, "-") != 0) {
+         pUsine u = trouverOuCreer(a, col2);
+         u->capacite = atof(col4);
       }
     }
     
