@@ -1,17 +1,17 @@
 CSV_OUT_TRIE="temp_sorted.csv"
 CSV_OUT_MIN="min_50.csv"
 CSV_OUT_MAX="max_10.csv"
-if(CSV_OUT==max){
+if [ "$CSV_OUT" == "vol_max.csv" ]; then
 tail -n +2 "$CSV_OUT" | sort -t';' -k2,2n > "$CSV_OUT_TRIE"
 
 head -n 50 "$CSV_OUT_TRIE" > "$CSV_OUT_MIN"
 
 tail -n 10 "$CSV_OUT_TRIE" > "$CSV_OUT_MAX"
-}
-if(CSV_OUT == src || CSV_OUT == real ){
+fi
+if [ "$CSV_OUT" == "vol_source.csv" || "$CSV_OUT" == "vol_real.csv" ]; then
 tail -n +2 "$CSV_OUT" | sort -t';' -k3,3n > "$CSV_OUT_TRIE"
 
 head -n 50 "$CSV_OUT_TRIE" > "$CSV_OUT_MIN"
 
 tail -n 10 "$CSV_OUT_TRIE" > "$CSV_OUT_MAX"
-}
+fi
