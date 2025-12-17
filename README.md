@@ -2,6 +2,7 @@
 
 ## Compilation : 
 ### linux : <br />
+- si "-bash: dos2unix: command not found" faire la commande "sed -i 's/\r$//' Launch.sh" puis compiler normalement
 - make clean <br />
 - make <br />
 - ./Shell.sh data/data.csv histo src <br />
