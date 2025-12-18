@@ -13,8 +13,10 @@ show_help() {
     echo "Utilisation pour 'leaks' : <ID_usine>"
     exit 0
 }
-
-if [ "$1" == "-h" ] || [ "$#" -ne 3 ]; then
+if [ "$1" == "-h" ]; then
+    show_help
+fi
+if[ "$#" -ne 3 ]; then
     show_erreur
     show_help
 fi
