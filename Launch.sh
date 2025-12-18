@@ -5,7 +5,7 @@ EXEC="codeC/cwire"
 MAKEFILE="Makefile"
 
 show_erreur() {
-    echo "Erreur il manque un élément"
+    echo "Erreur : entrée incorrecte"
 }
 show_help() {
     echo "Usage du programme : $0 <fichier.csv> <histo|leaks> <args>"
