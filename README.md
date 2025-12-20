@@ -32,13 +32,13 @@ Pour compiler le projet et générer l'exécutable, placez-vous à la racine du 
 
 #### **Pour générer les histogrammes des usines :**
 - pour les valeurs maximales :
-- ```bash
+  ```bash
   ./Launch.sh <fichier .csv> histo max
 - pour les valeurs sources :
-- ```bash
+  ```bash
   ./Launch.sh <fichier .csv> histo src
 - pour les valeurs réelles :
-- ```bash
+  ```bash
   ./Launch.sh <fichier .csv> histo real
 
 #### **Pour avoir les fuites (leaks) :**
