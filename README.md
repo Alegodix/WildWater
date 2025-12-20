@@ -4,7 +4,7 @@
 ### linux : <br />
 - make clean <br />
 - make <br />
-- ./Shell.sh data/data.csv histo src <br />
+- ./Shell.sh [nom du fichier que vous voulez analyser] commandes <br />
 
 **Auteurs :** <br />
 
