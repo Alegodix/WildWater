@@ -4,7 +4,7 @@
 ### linux : <br />
 - make clean <br />
 - make <br />
-- ./Shell.sh [nom du fichier que vous voulez analyser] commandes <br />
+- ./Shell.sh [nom du fichier que vous voulez analyser] [commandes histo ou leaks] <br />
 
 **Auteurs :** <br />
 
