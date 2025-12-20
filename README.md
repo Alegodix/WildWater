@@ -27,7 +27,7 @@
 ├── include/           # Dossier contenant  tous les fichiers .h
 │   ├── header.h       # Déclarations globales (structures, prototypes)
 │   └── couleurs.h     # Ensemble de raccourcis pour les couleurs
-│   Makefile           # Fichier de compilation 
+├── Makefile           # Fichier de compilation 
 ├── tests/             # Dossier pour les preuves de tests (images, logs)
 ├── Launch.sh          # Le script Shell (point d'entrée principal)
 └── README.md          # Instructions de compilation/utilisation
