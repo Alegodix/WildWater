@@ -1,35 +1,24 @@
-# Projet WildWater
+# 💧 Projet WildWater (C-Wire)
 
-## Compilation : 
-### Linux : <br />
-- make clean <br />
-- make <br />
-- ./Shell.sh [nom du fichier que vous voulez analyser] [commandes histo ou leaks] <br />
+> **Projet d'Info 3** - Analyse et optimisation de réseaux de distribution d'eau.  
+> **Promotion :** Pré-Ing2 2025-2026
 
-### **Auteurs :** <br />
+## 📖 Description
 
-- **Dorninger Siméon** (https://github.com/simedor) <br /> 
-- **Godineau Alexandre**  (https://github.com/Alegodix) <br />
-- **Renouf Timothée** (https://github.com/timothee23-gh) <br /> 
+Ce projet implémente une solution performante en **Langage C** et **Shell** pour traiter des fichiers de données massifs (plusieurs millions de lignes) représentant le réseau de distribution d'eau. Il utilise des structures de données avancées (**AVL**, Listes chaînées) pour optimiser les temps de traitement, calculer les fuites et générer des histogrammes via Gnuplot.
 
-**Promotion :** Pré-Ing2 2025-2026 <br />
+---
 
-## Projet d'info 3
+## ⚙️ Installation et Compilation
 
-## Structure du dépot GitHub:
+### Prérequis
+* Système : **Linux** / Unix
+* Compilateur : **gcc**
+* Outils : **make**, **gnuplot**
 
-```text ProjetWildWater/
-├── data/              # Pour stocker le fichier CSV source
-├── codeC/             # Dossier contenant  tout le code C
-│   ├── main.c         # Point d'entrée du C
-│   ├── avl.c          # Fonctions de gestion des AVL (rotation, insertion...)
-│   ├── input.c        # Gestion de la lecture du CSV
-│   └── output.c       # Gestion de l'écriture des fichiers temporaires
-├── include/           # Dossier contenant  tous les fichiers .h
-│   ├── header.h       # Déclarations globales (structures, prototypes)
-│   └── couleurs.h     # Ensemble de raccourcis pour les couleurs
-├── Makefile           # Fichier de compilation 
-├── tests/             # Dossier pour les preuves de tests (images, logs)
-├── Launch.sh          # Le script Shell (point d'entrée principal)
-└── README.md          # Instructions de compilation/utilisation
-``` 
+### Instructions de compilation
+Placez-vous à la racine du projet et exécutez les commandes suivantes :
+
+1. Nettoyer l'environnement (supprimer les anciens exécutables et fichiers objets) :
+   ```bash
+   make clean
