@@ -28,16 +28,13 @@ Pour compiler le projet et générer l'exécutable, placez-vous à la racine du 
 - chmod +x Launch.sh
 
 ### Utilisation
-Globalement :
-- ./Launch.sh <fichier.csv> <histo|leaks> <arguments>
 
-Précisément, pour générer les histogrammes des usines :
-
+#### **Pour générer les histogrammes des usines :**
 - pour les valeurs maximales : ./Launch.sh <fichier .csv> histo max
 - pour les valeurs sources : ./Launch.sh <fichier .csv> histo src
 - pour les valeurs réelles : ./Launch.sh <fichier .csv> histo real
 
-Pour avoir les fuites (leaks) : 
+#### **Pour avoir les fuites (leaks) :**
 - ./Launch.sh <fichier .csv> leaks "<nom de l'usine précis>"
 
 ## Structure du dépôt GitHub:
