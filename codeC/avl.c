@@ -137,12 +137,11 @@ Usine* rechercher(pAVL a, char* ID) {
 /*
 Ajoute enfant dans la liste des enfants de parent.
 */
-/* modification si jamais l'enfant est déjà là avant de l'ajouter*/
 void ajouterVoisin(pUsine parent, pUsine enfant, double fuite) {
-    // Vérification anti-doublon (ROBUSTESSE)
+    // Vérification si enfant est déjà dans la liste
     pTuyau temp = parent->listeEnfants;
     while (temp != NULL) {
-        if (temp->noeud == enfant) return; // Le lien existe déjà, on ne fait rien !
+        if (temp->noeud == enfant) return;
         temp = temp->pSuivant;
     }
 
