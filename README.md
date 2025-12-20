@@ -8,14 +8,14 @@
 **Promotion :** Pré-Ing2 2025-2026 <br />
 
 
-## 📖 Description
+## Description
 
 Ce projet est un programme un programme permettant de faire la
 synthèse de données d’un système de distribution d’eau
 
 ---
 
-## ⚙️ Compilation et Installation
+## Compilation et Installation
 
 ### Prérequis
 - Environnement Linux/Unix.
