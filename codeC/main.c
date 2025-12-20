@@ -3,16 +3,16 @@
 
 /*
 Fonction principale.
-Arguments attendus (définis par le script Shell) :
+Arguments attendus :
 - argv[0] : Nom de l'exécutable
 - argv[1] : Chemin du fichier CSV de données (ex: "data/data.csv")
-- argv[2] : Commande principale ("histo" ou "leaks")
-- argv[3] : Sous-commande ("src", "max", "real") OU ID Usine (pour leaks)
+- argv[2] : Commande ("histo" ou "leaks")
+- argv[3] : Mode ("src", "max", "real") OU ID Usine (pour leaks)
 */
 
 int main(int argc, char* argv[]) {
 
-  // 1. VERIFICATION DES ARGUMENTS
+  // VERIFICATION DES ARGUMENTS
   
   if (argc != 4) {
     fprintf(stderr, ROUGE "Erreur : Arguments insuffisants.\n" RESET);
@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
   char* commande = argv[2];
   char* mode = argv[3];
 
-  // 2. VERIFICATION DE LA COMMANDE ET PREPARATION DU FICHIER DE SORTIE
+  // VERIFICATION DE LA COMMANDE ET PREPARATION DU FICHIER DE SORTIE
   
   char nomFichierSortie[256];
   int commandeEntree = 0; // 0 = histo, 1 = leaks
@@ -51,7 +51,7 @@ int main(int argc, char* argv[]) {
     return 1;
   }
   
-  // 3. CHARGEMENT DES DONNEES
+  // CHARGEMENT DES DONNEES
 
   pAVL a = NULL;
   printf(JAUNE "Lecture du fichier %s en cours...\n" RESET, cheminFichier);
@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
   printf(VERT "Donnees chargées avec succès.\n" RESET);
   if (a == NULL) fprintf(stderr, MAGENTA "L'arbre est vide après chargement. Vérifiez le fichier d'entrée.\n" RESET);
 
-  // 4. GENERATION DU FICHIER CSV
+  // GENERATION DU FICHIER CSV
 
   if (commandeEntree == 0) {
     outputHisto(nomFichierSortie, a, mode);
@@ -68,7 +68,7 @@ int main(int argc, char* argv[]) {
   }
   printf(VERT_CLAIR "Succès ! Fichier généré : %s\n" RESET, nomFichierSortie);
   
-  // 5. NETTOYAGE MÉMOIRE
+  // NETTOYAGE MÉMOIRE
   
   libererMemoireAVL(a);
   printf("Mémoire AVL libérée.\n");
