@@ -8,9 +8,9 @@
 
 ### **Auteurs :** <br />
 
-- **GODINEAU Alexandre**  (https://github.com/Alegodix) <br />
-- **Siméon Dorninger** (https://github.com/simedor) <br /> 
-- **Timothée Renouf** (https://github.com/timothee23-gh) <br /> 
+- **Dorninger Siméon** (https://github.com/simedor) <br /> 
+- **Godineau Alexandre**  (https://github.com/Alegodix) <br />
+- **Renouf Timothée** (https://github.com/timothee23-gh) <br /> 
 
 **Promotion :** Pré-Ing2 2025-2026 <br />
 
