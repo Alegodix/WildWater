@@ -67,17 +67,17 @@ void chargerDonnees(char* cheminFichier, pAVL* a, char* commande, char* mode) {
     // Vérification minimale : on a besoin au moins des identifiants
     if (col2 == NULL || col3 == NULL || col4 == NULL) continue;
 
-    // --- MODE HISTOGRAMME ---
+    // MODE HISTOGRAMME
     if (histoActive) {
         // Pour l'histo, on a besoin que col4 soit un nombre (Capacité ou Volume)
         if (!estNumerique(col4)) continue;
 
-        // 1. Capacité (Usine seule)
+        // Capacité (Usine seule)
         if (strcmp(col3, "-") == 0 && strcmp(col2, "-") != 0) {
             pUsine u = trouverOuCreer(a, col2);
             u->capacite = atof(col4);
         }
-        // 2. Trajet (Source -> Usine)
+        // Trajet (Source -> Usine)
         else if (strcmp(col3, "-") != 0 && strcmp(col2, "-") != 0) {
             if (strcmp(mode, "src") == 0 || strcmp(mode, "real") == 0) {
                 pUsine u = trouverOuCreer(a, col3); 
@@ -95,9 +95,9 @@ void chargerDonnees(char* cheminFichier, pAVL* a, char* commande, char* mode) {
             }
         }
     }
-    // --- MODE LEAKS (CORRIGÉ) ---
+    // MODE LEAKS
     else if (leaksActive) {
-      // 1. Tuyau (Connexion)
+      // Tuyau
       if (strcmp(col3, "-") != 0) {
         pUsine parent = trouverOuCreer(a, col2);
         pUsine enfant = trouverOuCreer(a, col3);
@@ -106,15 +106,14 @@ void chargerDonnees(char* cheminFichier, pAVL* a, char* commande, char* mode) {
         // Ajout du voisin (Tuyau aval)
         ajouterVoisin(parent, enfant, fuite);
 
-        // NOUVEAU : Si la colonne 4 contient un nombre, c'est une ligne Source -> Usine.
+        // Si la colonne 4 contient un nombre, c'est une ligne Source -> Usine.
         // On calcule donc le volume réel qui arrive à l'usine (enfant).
         if (estNumerique(col4)) {
             double volSource = atof(col4);
-            // On ajoute ce volume à l'usine, moins les fuites du trajet source->usine
             enfant->volumeTraite += volSource * (1.0 - (fuite / 100.0));
         }
       }
-      // 2. Capacité de l'usine (Toujours utile au cas où)
+      // Capacité de l'usine (par sécurité) 
       else if (strcmp(col2, "-") != 0 && estNumerique(col4)) {
          pUsine u = trouverOuCreer(a, col2);
          u->capacite = atof(col4);
