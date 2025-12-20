@@ -24,7 +24,7 @@ synthèse de données d’un système de distribution d’eau
 
 ### Commandes de build
 
-Mettez le fichier .dat/.csv que vous souhaitez analyser à la racine.
+Mettez le fichier .dat/.csv que vous souhaitez analyser à la racine du projet.
 
 Pour compiler le projet et générer l'exécutable, placez-vous à la racine du projet cloné et exécutez :
 - ```bash
