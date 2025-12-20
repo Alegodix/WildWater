@@ -40,7 +40,7 @@ Précisément, pour générer les histogrammes des usines :
 Pour avoir les fuites (leaks) : 
 - ./Launch.sh <fichier .csv> leaks "<nom de l'usine précis>"
 
-## Structure du dépot GitHub:
+## Structure du dépôt GitHub:
 
 ```text ProjetWildWater/
 ├── data/              # Pour stocker le fichier CSV source
