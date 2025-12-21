@@ -66,7 +66,7 @@ Pour compiler le projet et générer l'exécutable, placez-vous à la racine du 
 │   ├── header.h       # Déclarations globales (structures, prototypes)
 │   └── couleurs.h     # Ensemble de raccourcis pour les couleurs
 ├── Makefile           # Fichier de compilation 
-├── tests/             # Dossier pour les preuves de tests (images, logs)
+├── tests/             # Dossier pour les tests que nous avions effectués (images, logs)
 ├── Launch.sh          # Le script Shell (point d'entrée principal)
 └── README.md          # Instructions de compilation/utilisation
 ``` 
