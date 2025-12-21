@@ -10,23 +10,24 @@ cwire.exe
 *.out
 # Fichier .dat
 c-wildwater_v3.dat
+c-wildwater_v0.dat
 
 # Fichier tests inutiles
 50-10_usine.txt
 
 # Fichiers générés par le programme (CSV de sortie)
 ############################################
-vol_source.csv
-vol_max.csv
-vol_real.csv
-src_max.csv
-src_min.csv
-temp_top10.csv
-temp_min50.csv
-leaks.csv
+#vol_source.csv
+#vol_max.csv
+#vol_real.csv
+#src_max.csv
+#src_min.csv
+#temp_top10.csv
+#temp_min50.csv
+#leaks.csv
 
 # Fichiers .png générés 
-*.png
+#*.png
 
 
 # Fichiers de débogage et temporaires

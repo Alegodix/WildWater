@@ -52,7 +52,7 @@ Pour compiler le projet et générer l'exécutable, placez-vous à la racine du 
 ## Structure du dépôt GitHub:
 
 ```text ProjetWildWater/
-├── <fichier>.csv      # Le fichier CSV source
+├── <fichier.csv>      # Le fichier CSV source
 ├── codeC/             # Dossier contenant  tout le code C
 │   ├── main.c         # Point d'entrée du C
 │   ├── avl.c          # Fonctions de gestion des AVL (rotation, insertion...)
