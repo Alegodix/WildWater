@@ -5,7 +5,7 @@
 **GODINEAU Alexandre**  (https://github.com/Alegodix) <br /> 
 **Siméon Dorninger** (https://github.com/simedor) <br /> 
 **Timothée Renouf** (https://github.com/timothee23-gh) <br /> 
-**Promotion :** Pré-Ing2 2025-2026 <br />
+**Promotion :** Pré-Ing2 2025-2026 MEF-2 D <br />
 
 
 ## Description
@@ -66,7 +66,7 @@ Pour compiler le projet et générer l'exécutable, placez-vous à la racine du 
 │   ├── header.h       # Déclarations globales (structures, prototypes)
 │   └── couleurs.h     # Ensemble de raccourcis pour les couleurs
 ├── Makefile           # Fichier de compilation 
-├── tests/             # Dossier pour les preuves de tests (images, logs)
+├── tests/             # Dossier pour les tests que nous avions effectués (images, logs)
 ├── Launch.sh          # Le script Shell (point d'entrée principal)
 └── README.md          # Instructions de compilation/utilisation
 ``` 
